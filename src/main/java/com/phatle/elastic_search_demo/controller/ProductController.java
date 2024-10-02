@@ -1,5 +1,6 @@
 package com.phatle.elastic_search_demo.controller;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.phatle.elastic_search_demo.dto.ProductQueryDto;
 import com.phatle.elastic_search_demo.es_entity.Product;
 import com.phatle.elastic_search_demo.service.ProductService;
 
+import co.elastic.clients.elasticsearch._types.ElasticsearchException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -32,8 +36,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public Iterable<Product> getAllProducts() {
-        return productService.findAll();
+    public Iterable<Product> getAllProducts(@Valid ProductQueryDto productQueryDto) throws ElasticsearchException, IOException {
+        return productService.findAll(productQueryDto);
     }
 
     @DeleteMapping("/{id}")
