@@ -1,0 +1,43 @@
+# Ignore Maven build files
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Ignore temporary files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Ignore IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.code-workspace
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Versioning and metadata
+.git
+.gitignore
+
+# GitHub Actions
+.github/
+
+# Ignore Docker-related files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Ignore node_modules if you have a frontend in the same repo
+node_modules/
+
+# Ignore environment files
+.env

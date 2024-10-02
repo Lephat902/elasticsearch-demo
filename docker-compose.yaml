@@ -1,0 +1,40 @@
+services:
+  elasticsearch:
+    image: elasticsearch:8.15.2
+    container_name: elasticsearch
+    environment:
+      - node.name=es01
+      - cluster.name=es-cluster
+      - cluster.initial_master_nodes=es01
+      # - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+      - cluster.name="docker-cluster"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    # ulimits:
+    #   memlock:
+    #     soft: -1
+    #     hard: -1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./es/data:/usr/share/elasticsearch/data:rw
+      - ./es/logs:/usr/share/elasticsearch/logs:rw
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+
+  springboot-app:
+    image: springboot-app:latest
+    container_name: springboot-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app  # Mount the current directory to the container for live reload
+    depends_on:
+      - elasticsearch
