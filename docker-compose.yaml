@@ -6,15 +6,10 @@ services:
       - node.name=es01
       - cluster.name=es-cluster
       - cluster.initial_master_nodes=es01
-      # - bootstrap.memory_lock=true
       - xpack.security.enabled=false
       - xpack.security.enrollment.enabled=false
       - cluster.name="docker-cluster"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    # ulimits:
-    #   memlock:
-    #     soft: -1
-    #     hard: -1
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -25,6 +20,11 @@ services:
       resources:
         limits:
           memory: 1g
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
 
   springboot-app:
     image: springboot-app:latest
@@ -37,4 +37,5 @@ services:
     volumes:
       - .:/app  # Mount the current directory to the container for live reload
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
