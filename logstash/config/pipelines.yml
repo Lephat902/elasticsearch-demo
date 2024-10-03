@@ -1,0 +1,2 @@
+- pipeline.id: Postgres-Elastic-Sync
+  path.config: "/usr/share/logstash/config/postgres-elastic-sync.conf"

@@ -38,3 +38,6 @@ build/
 
 # Docker bind mounts volume
 es/
+
+# Logstash conf
+logstash/config/*.conf

@@ -5,8 +5,12 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.phatle.elastic_search_demo.dto.AddProductDto;
 import com.phatle.elastic_search_demo.dto.ProductQueryDto;
-import com.phatle.elastic_search_demo.es_entity.Product;
+import com.phatle.elastic_search_demo.entity.Product;
+import com.phatle.elastic_search_demo.entity.ProductES;
+import com.phatle.elastic_search_demo.es_repository.ESProductRepository;
+import com.phatle.elastic_search_demo.mapper.EntityDTOMapper;
 import com.phatle.elastic_search_demo.mapper.SearchResponseMapper;
 import com.phatle.elastic_search_demo.repository.ProductRepository;
 
@@ -22,21 +26,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ESProductRepository esProductRepository;
     private final ElasticsearchClient elasticsearchClient;
+    private final EntityDTOMapper entityDTOMapper;
 
-    public Product save(Product product) {
-        return productRepository.save(product);
-    }
-
-    public Optional<Product> findById(String id) {
-        return productRepository.findById(id);
+    public Product save(AddProductDto product) {
+        var productToSave = entityDTOMapper.toEntity(product);
+        return productRepository.save(productToSave);
     }
 
     public void deleteById(String id) {
         productRepository.deleteById(id);
+        esProductRepository.deleteById(id);
     }
 
-    public Iterable<Product> findAll(ProductQueryDto queryDto) throws ElasticsearchException, IOException {
+    public Optional<ProductES> findById(String id) {
+        return esProductRepository.findById(id);
+    }
+
+    public Iterable<ProductES> findAll(ProductQueryDto queryDto) throws ElasticsearchException, IOException {
         var boolQuery = QueryBuilders.bool();
 
         addQuery(boolQuery, queryDto);
@@ -51,7 +59,7 @@ public class ProductService {
                 .from(page * limit)
                 .size(limit));
 
-        var searchResponse = elasticsearchClient.search(searchRequest, Product.class);
+        var searchResponse = elasticsearchClient.search(searchRequest, ProductES.class);
 
         return SearchResponseMapper.extractItems(searchResponse);
     }
@@ -61,10 +69,9 @@ public class ProductService {
             boolQuery.must(QueryBuilders.multiMatch(m -> m
                     .query(queryDto.getQ())
                     .fields("name", "description")
-                    .fuzziness("AUTO")
-            ));
+                    .fuzziness("AUTO")));
         }
-    }    
+    }
 
     private void addPriceFilters(BoolQuery.Builder boolQuery, ProductQueryDto queryDto) {
         if (queryDto.getMinPrice() != null) {

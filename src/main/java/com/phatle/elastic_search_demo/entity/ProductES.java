@@ -1,4 +1,4 @@
-package com.phatle.elastic_search_demo.es_entity;
+package com.phatle.elastic_search_demo.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Product {
+public class ProductES implements Identifiable {
     @Id
     private String id;
     private String name;

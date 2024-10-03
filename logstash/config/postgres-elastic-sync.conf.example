@@ -1,0 +1,28 @@
+input {
+  jdbc {
+    jdbc_driver_class => "org.postgresql.Driver"
+    jdbc_driver_library => "/usr/share/logstash/vendor/postgres-driver.jar"
+    jdbc_connection_string => "jdbc:postgresql://example.com/elastic-search-demo-db"
+    jdbc_user => "username"
+    jdbc_password => "password"
+    jdbc_paging_enabled => true
+    use_column_value => true
+    tracking_column => "modification_time"
+    tracking_column_type => "timestamp"
+    schedule => "*/10 * * * * *"
+    statement => "SELECT * FROM tbl_product WHERE modification_time > :sql_last_value AND modification_time < CURRENT_TIMESTAMP ORDER BY modification_time ASC"
+  }
+}
+filter {
+  mutate {
+    copy => { "id" => "[@metadata][_id]"}
+    remove_field => ["id", "@version", "@timestamp", "modification_time"]
+  }
+}
+output {
+  elasticsearch {
+    hosts => ["http://elasticsearch:9200"]
+    index => "products"
+    document_id => "%{[@metadata][_id]}"
+  }
+}
