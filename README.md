@@ -1,3 +1,4 @@
+
 # Tiny Demo ElasticSearch App
 
 ## Introduction
@@ -8,12 +9,12 @@ This is a tiny demo app to experiment with concepts of ElasticSearch.
 
 ## What-to-do
 
--   Set up a data source using traditional PostgreSQL.
--   Set up basic interactions with ElasticSearch.
--   Use LogStash to synchronize data from PostgreSQL to ElasticSearch.
+-   Set up a data source using traditional PostgreSQL. ✅
+-   Set up basic interactions with ElasticSearch. ✅
+-   Use LogStash to synchronize data from PostgreSQL to ElasticSearch. ([Reference](https://www.elastic.co/blog/how-to-keep-elasticsearch-synchronized-with-a-relational-database-using-logstash)) ✅
 -   Use Kibana to visualize and analyze data.
 -   Explore advanced ElasticSearch features like:
-    -   **Full-text search**: Implement powerful search capabilities.
+    -   **Full-text search**: Implement powerful search capabilities. ✅ (by using fuzziness)
     -   **Aggregations**: Perform complex data analysis.
     -   **Indexing**: Optimize data indexing for better performance.
     -   **Security**: Set up user authentication and role-based access control.
@@ -41,7 +42,13 @@ For the first-time setup, run the following commands:
     ```sh
     chmod -R 777 es
     ```
-    
+
+### Fill in the neccessities
+For a PostgreSQL database, I recommend creating one at [Neon Tech](https://neon.tech/).
+
+In order to run successfully, you have to:
+1. Create a `.env` file from the template file `.env.example` and then fill in the required values.
+2. Create a `postgres-elastic-sync.conf` file from `postgres-elastic-sync.conf.example` and then fill in the required values (database credentials specifically).
 
 ### Running the App
 
