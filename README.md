@@ -12,12 +12,7 @@ This is a tiny demo app to experiment with concepts of ElasticSearch.
 -   Set up a data source using traditional PostgreSQL. ✅
 -   Set up basic interactions with ElasticSearch. ✅
 -   Use LogStash to synchronize data from PostgreSQL to ElasticSearch. ([Reference](https://www.elastic.co/blog/how-to-keep-elasticsearch-synchronized-with-a-relational-database-using-logstash)) ✅
--   Use Kibana to visualize and analyze data.
--   Explore advanced ElasticSearch features like:
-    -   **Full-text search**: Implement powerful search capabilities. ✅ (by using fuzziness)
-    -   **Aggregations**: Perform complex data analysis.
-    -   **Indexing**: Optimize data indexing for better performance.
-    -   **Security**: Set up user authentication and role-based access control.
+-   Use Kibana to visualize and analyze data. ✅
 
 ## How to Start
 
